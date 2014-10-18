@@ -1,20 +1,17 @@
 /** @jsx React.DOM */
-
 var React = require('react');
+var buttons = require('./buttons');
 
-var Hello = React.createClass({
-  componentDidMount: function () {
-    alert('Hello there!');
-  },
+var Page = React.createClass({
   render: function() {
     return (
-      <h1>
-        This a node and react app.
-      </h1>
+      <div>
+        <buttons.ButtonRed />
+        <buttons.ButtonGreen />
+        <buttons.ButtonBlue />
+      </div>
     );
   }
 });
-React.renderComponent(
-  <Hello />,
-  document.getElementById('app')
-);
+
+React.renderComponent(<Page />, document.getElementById('app'));
