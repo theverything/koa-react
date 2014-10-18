@@ -5,7 +5,8 @@ var gulp = require('gulp');
 var scss = require('gulp-ruby-sass');
 var imagemin = require('gulp-imagemin');
 var runSequence = require('run-sequence');
-var webpack = require('gulp-webpack');
+var webpack = require('webpack');
+var gulpWebpack = require('gulp-webpack');
 var nodemon = require('gulp-nodemon');
 var rimraf = require('rimraf');
 var chalk = require('chalk');
@@ -32,7 +33,7 @@ gulp.task('clean', function (cb) {
  */
 gulp.task('js', function () {
   return gulp.src(paths.js)
-    .pipe(webpack(webpackConfig))
+    .pipe(gulpWebpack(webpackConfig, webpack))
     .pipe(gulp.dest('dist/js'));
 });
 
