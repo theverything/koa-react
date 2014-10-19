@@ -1,0 +1,1 @@
+// An example vendor file

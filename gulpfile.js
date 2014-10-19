@@ -1,12 +1,14 @@
 /**
  * Modules
  */
+var path = require('path');
 var gulp = require('gulp');
 var scss = require('gulp-ruby-sass');
 var imagemin = require('gulp-imagemin');
 var runSequence = require('run-sequence');
 var webpack = require('webpack');
 var gulpWebpack = require('gulp-webpack');
+var concat = require('gulp-concat');
 var nodemon = require('gulp-nodemon');
 var rimraf = require('rimraf');
 var chalk = require('chalk');
@@ -16,9 +18,13 @@ var webpackConfig = require('./webpack.config.js');
  * Assets Paths
  */
 var paths = {
-  js: ['public/js/**/*.js'],
+  js: ['public/js/**/*.js', 'public/js/vendor/*'],
+  jsVendor: ['public/js/vendor/*.js'],
   scss: ['public/scss/**/*.scss'],
-  img: 'public/img/**/*'
+  img: 'public/img/**/*',
+  dist: function (p) {
+    return path.join('./dist', p);
+  }
 };
 
 /**
@@ -29,12 +35,28 @@ gulp.task('clean', function (cb) {
 });
 
 /**
- * Build javascript assets
+ * Build all javascript assets
  */
 gulp.task('js', function () {
+  runSequence(['js:main', 'js:vendor']);
+});
+
+/**
+ * Build main javascript assets
+ */
+gulp.task('js:main', function () {
   return gulp.src(paths.js)
     .pipe(gulpWebpack(webpackConfig, webpack))
-    .pipe(gulp.dest('dist/js'));
+    .pipe(gulp.dest(paths.dist('js')));
+});
+
+/**
+ * Build vendor javascript assets
+ */
+gulp.task('js:vendor', function () {
+  return gulp.src(paths.jsVendor)
+    .pipe(concat('vendor.js'))
+    .pipe(gulp.dest(paths.dist('js')));
 });
 
 /**
@@ -46,7 +68,7 @@ gulp.task('scss', function () {
     .on('error', function (err) {
       console.log(chalk.red(err.message));
     })
-    .pipe(gulp.dest('dist/css'));
+    .pipe(gulp.dest(paths.dist('css')));
 });
 
 /**
@@ -55,7 +77,7 @@ gulp.task('scss', function () {
 gulp.task('img', function () {
   return gulp.src(paths.img)
     .pipe(imagemin({optimizationLevel: 5}))
-    .pipe(gulp.dest('dist/img'));
+    .pipe(gulp.dest(paths.dist('img')));
 });
 
 /**
