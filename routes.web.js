@@ -3,7 +3,7 @@ var Router = require('koa-router');
 var routes = new Router();
 
 routes
-  .get('/', function *(next) {
+  .all(/.*/ig, function *(next) {
     this.body = yield render('index.html', { engine: 'handlebars' });
   });
 
