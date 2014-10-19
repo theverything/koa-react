@@ -97,7 +97,7 @@ gulp.task('server', function () {
     script: 'server.js',
     ext: 'html js',
     ignore: [
-      'node_modules',
+      'node_modules/**/*',
       'webpack.config.js',
       'gulpfile.js'
     ],
